@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "BusTrack",
+    "slug": "bustrack-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "newArchEnabled": true,
+    "extra": {
+      "eas": {
+        "projectId": "865c02a9-f842-4c10-bce0-f0ef318bbbd6"
+      }
+    }
+  }
+}
