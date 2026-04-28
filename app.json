@@ -13,6 +13,9 @@
       "eas": {
         "projectId": "865c02a9-f842-4c10-bce0-f0ef318bbbd6"
       }
+    },
+    "android": {
+      "package": "com.kherasam18.bustrackmobile"
     }
   }
 }
