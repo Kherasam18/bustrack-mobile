@@ -2,14 +2,22 @@
 // drivers. Will be replaced with the full driver tab/stack layout in Phase 10.
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import useAuthStore from '../store/authStore';
 
 // Inline placeholder for the driver home screen (Phase 10)
 function DriverHomeScreen() {
+  const logout = useAuthStore((state) => state.logout);
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Driver Home — Phase 10</Text>
+      <TouchableOpacity
+        onPress={logout}
+        style={{ marginTop: 24, padding: 12, backgroundColor: '#EF4444', borderRadius: 8 }}
+      >
+        <Text style={{ color: '#fff', fontWeight: '700' }}>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 }

@@ -1,13 +1,15 @@
 // src/navigation/AuthNavigator.jsx — Stack navigator for unauthenticated users.
-// RoleSelect (LoginScreen) is the entry point. Screens 2–6 are inline placeholders
-// that will be replaced with real implementations in later phases.
+// RoleSelect, DriverLogin, and ParentLogin are real screen imports.
+// Remaining screens (4–6) are inline placeholders replaced in Phase 9d.
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-// Real screen import
+// Real screen imports
 import LoginScreen from '../screens/auth/LoginScreen';
+import DriverLoginScreen from '../screens/auth/DriverLoginScreen';
+import ParentLoginScreen from '../screens/auth/ParentLoginScreen';
 
 // Shared placeholder style
 const placeholderStyles = StyleSheet.create({
@@ -24,25 +26,7 @@ const placeholderStyles = StyleSheet.create({
   },
 });
 
-// -- Inline placeholder screens (to be replaced in Phases 9b–9d) --
-
-// Placeholder for the driver login form (Phase 9b)
-function DriverLoginScreen() {
-  return (
-    <View style={placeholderStyles.container}>
-      <Text style={placeholderStyles.text}>Driver Login — Phase 9b</Text>
-    </View>
-  );
-}
-
-// Placeholder for the parent login form (Phase 9c)
-function ParentLoginScreen() {
-  return (
-    <View style={placeholderStyles.container}>
-      <Text style={placeholderStyles.text}>Parent Login — Phase 9c</Text>
-    </View>
-  );
-}
+// -- Inline placeholder screens (to be replaced in Phase 9d) --
 
 // Placeholder for the forgot password screen (Phase 9d)
 function ForgotPasswordScreen() {
