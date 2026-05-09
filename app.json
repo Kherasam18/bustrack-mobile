@@ -15,7 +15,8 @@
       }
     },
     "android": {
-      "package": "com.kherasam18.bustrackmobile"
+      "package": "com.kherasam18.bustrack",
+      "googleServicesFile": "./google-services.json"
     }
   }
 }
