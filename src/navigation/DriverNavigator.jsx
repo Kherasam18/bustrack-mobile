@@ -1,56 +1,114 @@
-// src/navigation/DriverNavigator.jsx — Placeholder stack navigator for authenticated
-// drivers. Will be replaced with the full driver tab/stack layout in Phase 10.
+// src/navigation/DriverNavigator.jsx — Bottom tab navigator for authenticated
+// drivers. Two tabs: Home (DriverHomeScreen) and Profile (placeholder for
+// Phase 10c). Replaces the previous single-screen placeholder stack.
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import useAuthStore from '../store/authStore';
+import { View, Text, StyleSheet } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import DriverHomeScreen from '../screens/driver/DriverHomeScreen';
 
-// Inline placeholder for the driver home screen (Phase 10)
-function DriverHomeScreen() {
-  const logout = useAuthStore((state) => state.logout);
+// Create the bottom tab navigator
+const Tab = createBottomTabNavigator();
+
+// Theme colours matching the app design
+const COLORS = {
+  bg: '#0F172A',
+  tabBg: '#1E293B',
+  active: '#2563EB',
+  inactive: '#6B7280',
+  border: '#334155',
+  textMuted: '#94A3B8',
+};
+
+// Inline placeholder for the profile tab (Phase 10c)
+function DriverProfilePlaceholder() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Driver Home — Phase 10</Text>
-      <TouchableOpacity
-        onPress={logout}
-        style={{ marginTop: 24, padding: 12, backgroundColor: '#EF4444', borderRadius: 8 }}
-      >
-        <Text style={{ color: '#fff', fontWeight: '700' }}>Logout</Text>
-      </TouchableOpacity>
+    <View style={placeholderStyles.container}>
+      <Text style={placeholderStyles.icon}>👤</Text>
+      <Text style={placeholderStyles.text}>Profile — Coming in Phase 10c</Text>
     </View>
   );
 }
 
-// Create the driver stack navigator
-const Stack = createNativeStackNavigator();
-
-// Default screen options — no header
-const screenOptions = { headerShown: false };
-
-/**
- * DriverNavigator — authenticated driver flow.
- * Currently a single placeholder screen; expanded in Phase 10.
- */
-function DriverNavigator() {
-  return (
-    <Stack.Navigator screenOptions={screenOptions}>
-      <Stack.Screen name="DriverHome" component={DriverHomeScreen} />
-    </Stack.Navigator>
-  );
-}
-
-const styles = StyleSheet.create({
+// Placeholder screen styles
+const placeholderStyles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#0F172A',
+    backgroundColor: COLORS.bg,
+  },
+  icon: {
+    fontSize: 48,
+    marginBottom: 16,
   },
   text: {
     fontSize: 16,
-    color: '#94A3B8',
+    color: COLORS.textMuted,
     fontWeight: '600',
+  },
+});
+
+/**
+ * DriverNavigator — bottom tab navigator with Home and Profile tabs.
+ */
+function DriverNavigator() {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: COLORS.active,
+        tabBarInactiveTintColor: COLORS.inactive,
+        tabBarShowLabel: true,
+        tabBarStyle: styles.tabBar,
+        tabBarLabelStyle: styles.tabLabel,
+      }}
+    >
+      {/* Home tab — main driver screen */}
+      <Tab.Screen
+        name="DriverHome"
+        component={DriverHomeScreen}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color }) => (
+            <Text style={[styles.tabIcon, { color }]}>🏠</Text>
+          ),
+        }}
+      />
+
+      {/* Profile tab — placeholder until Phase 10c */}
+      <Tab.Screen
+        name="DriverProfile"
+        component={DriverProfilePlaceholder}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color }) => (
+            <Text style={[styles.tabIcon, { color }]}>👤</Text>
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+const styles = StyleSheet.create({
+  // Tab bar container styling
+  tabBar: {
+    backgroundColor: COLORS.tabBg,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.border,
+    height: 60,
+    paddingBottom: 8,
+    paddingTop: 8,
+  },
+  // Tab label text
+  tabLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  // Tab icon text (emoji)
+  tabIcon: {
+    fontSize: 22,
   },
 });
 
