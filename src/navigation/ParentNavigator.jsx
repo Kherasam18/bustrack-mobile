@@ -11,7 +11,7 @@ function ParentHomeScreen() {
   const logout = useAuthStore((state) => state.logout);
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Driver Home — Phase 10</Text>
+      <Text style={styles.text}>Parent Home — Phase 11</Text>
       <TouchableOpacity
         onPress={logout}
         style={{ marginTop: 24, padding: 12, backgroundColor: '#EF4444', borderRadius: 8 }}

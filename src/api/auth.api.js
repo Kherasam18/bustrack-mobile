@@ -30,3 +30,31 @@ export async function parentLogin({ phone, password, school_id }) {
   });
   return response.data.data;
 }
+
+// Request a password-reset OTP for a parent account
+export async function forgotPasswordSendOTP({ phone, school_id }) {
+  const response = await api.post('/api/auth/parent/forgot-password', {
+    phone: String(phone).trim(),
+    school_id,
+  });
+  return response.data.data;
+}
+
+// Verify the OTP and receive a short-lived reset token
+export async function forgotPasswordVerifyOTP({ phone, school_id, otp }) {
+  const response = await api.post('/api/auth/parent/forgot-password/verify', {
+    phone: String(phone).trim(),
+    school_id,
+    otp: String(otp).trim(),
+  });
+  return response.data.data;
+}
+
+// Reset the parent password using a valid reset token
+export async function forgotPasswordReset({ reset_token, new_password }) {
+  const response = await api.post('/api/auth/parent/forgot-password/reset', {
+    reset_token,
+    new_password,
+  });
+  return response.data.data;
+}

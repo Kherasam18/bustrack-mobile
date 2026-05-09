@@ -38,9 +38,12 @@ const INPUT_BORDER_FOCUS = '#3B82F6';
 function DriverLoginScreen() {
   const navigation = useNavigation();
 
+  // Read previously resolved school from persisted store (synchronous)
+  const storedSchool = useAuthStore((state) => state.resolvedSchool);
+
   // -- Stage 1 state: school resolution --
-  const [schoolCode, setSchoolCode] = useState('');
-  const [resolvedSchool, setResolvedSchool] = useState(null);
+  const [schoolCode, setSchoolCode] = useState(storedSchool?.code || '');
+  const [resolvedSchool, setResolvedSchool] = useState(storedSchool);
   const [schoolError, setSchoolError] = useState('');
   const [isResolvingSchool, setIsResolvingSchool] = useState(false);
 
