@@ -7,8 +7,8 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "env": {
-        "GOOGLE_SERVICES_JSON": "google-services.json"
+      "android": {
+        "googleServicesFile": "google-services.json"
       }
     },
     "preview": {
