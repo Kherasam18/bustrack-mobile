@@ -8,6 +8,7 @@ import { registerRootComponent } from 'expo';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import RootNavigator from './navigation/RootNavigator';
+import './services/backgroundLocation';
 
 // Root component rendered by Expo's entry point
 function App() {
