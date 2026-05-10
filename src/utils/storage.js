@@ -13,6 +13,7 @@ export const STORAGE_KEYS = Object.freeze({
   RESOLVED_SCHOOL: '@bustrack/resolved_school',
   ACTIVE_JOURNEY_ID: 'bustrack_active_journey_id',
   LOCATION_QUEUE: 'bustrack_location_queue',
+  LAST_GPS_SENT_AT: 'bustrack_last_gps_sent_at',
 });
 
 // Store a JSON-serialised value under the given key

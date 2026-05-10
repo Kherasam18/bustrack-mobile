@@ -4,6 +4,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Alert } from 'react-native';
+import { getItem, removeItem, STORAGE_KEYS } from '../utils/storage';
 import useJourneyStore, {
   getPickupJourney,
   getDropJourney,
@@ -36,6 +37,34 @@ function useJourney() {
 
   // Timestamp of the last successful GPS send (for TrackingBadge)
   const [lastSentAt, setLastSentAt] = useState(null);
+
+  // Poll AsyncStorage every 15 seconds to read the timestamp
+  // written by the background task after each successful GPS send.
+  // Background task context cannot update React state directly.
+  useEffect(() => {
+    let interval = null;
+
+    // Only poll when a journey is actively broadcasting GPS
+    const activeStatuses = ['PICKUP_STARTED', 'DROP_STARTED'];
+    const activeJourney = journeys.find(j => activeStatuses.includes(j.status));
+
+    if (activeJourney) {
+      // Read immediately on mount/journey-change
+      getItem(STORAGE_KEYS.LAST_GPS_SENT_AT).then(value => {
+        if (value) setLastSentAt(new Date(value));
+      });
+
+      // Then poll every 15 seconds
+      interval = setInterval(async () => {
+        const value = await getItem(STORAGE_KEYS.LAST_GPS_SENT_AT);
+        if (value) setLastSentAt(new Date(value));
+      }, 15000);
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [journeys]);
 
   // Ref to track whether GPS resume has already run
   const hasResumedGps = useRef(false);
@@ -134,6 +163,7 @@ function useJourney() {
       // Stop GPS broadcasting after arriving at school
       await stopLocationBroadcasting();
       setLastSentAt(null);
+      await removeItem(STORAGE_KEYS.LAST_GPS_SENT_AT);
     } catch (err) {
       Alert.alert('Error', err.message);
     } finally {
@@ -181,6 +211,7 @@ function useJourney() {
       // Stop GPS broadcasting after journey ends
       await stopLocationBroadcasting();
       setLastSentAt(null);
+      await removeItem(STORAGE_KEYS.LAST_GPS_SENT_AT);
     } catch (err) {
       Alert.alert('Error', err.message);
     } finally {

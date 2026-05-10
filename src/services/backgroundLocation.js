@@ -70,6 +70,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
   // Send the current location update
   try {
     await sendLocationUpdate({ journey_id: journeyId, lat, lng, speed });
+    await setItem(STORAGE_KEYS.LAST_GPS_SENT_AT, new Date().toISOString());
   } catch (err) {
     // 409 means the journey is no longer active — stop broadcasting
     if (err.statusCode === 409) {
