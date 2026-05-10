@@ -18,6 +18,7 @@ import { useJourney } from '../../hooks/useJourney';
 import { formatTime } from '../../utils/formatTime';
 import JourneyButton from '../../components/driver/JourneyButton';
 import AppButton from '../../components/shared/AppButton';
+import TrackingBadge from '../../components/driver/TrackingBadge';
 
 // Theme colours used throughout the screen
 const COLORS = {
@@ -103,7 +104,13 @@ function DriverHomeScreen() {
     handleEndJourney,
     isActionLoading,
     activeAction: loadingAction,
+    lastSentAt,
   } = useJourney();
+
+  // Determine if a journey is currently active (GPS should be broadcasting)
+  const isJourneyActive =
+    pickupJourney?.status === 'PICKUP_STARTED' ||
+    dropJourney?.status === 'DROP_STARTED';
 
   // Derive current action and status
   const currentAction = getActiveAction(pickupJourney, dropJourney);
@@ -201,6 +208,9 @@ function DriverHomeScreen() {
             </View>
           ) : null}
         </View>
+
+        {/* GPS tracking status badge — visible when journey is active */}
+        {isJourneyActive && <TrackingBadge lastSentAt={lastSentAt} style={styles.trackingBadge} />}
 
         {/* Journey status section */}
         <View style={styles.card}>
@@ -403,6 +413,10 @@ const styles = StyleSheet.create({
   // Action button section
   actionSection: {
     marginTop: 8,
+  },
+  // GPS tracking badge spacing
+  trackingBadge: {
+    marginBottom: 16,
   },
 });
 

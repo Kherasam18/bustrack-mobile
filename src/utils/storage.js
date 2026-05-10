@@ -11,6 +11,8 @@ export const STORAGE_KEYS = Object.freeze({
   AUTH_USER: '@bustrack/auth_user',
   AUTH_CHILDREN: '@bustrack/auth_children',
   RESOLVED_SCHOOL: '@bustrack/resolved_school',
+  ACTIVE_JOURNEY_ID: 'bustrack_active_journey_id',
+  LOCATION_QUEUE: 'bustrack_location_queue',
 });
 
 // Store a JSON-serialised value under the given key

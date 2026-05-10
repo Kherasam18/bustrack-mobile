@@ -14,9 +14,23 @@
         "projectId": "865c02a9-f842-4c10-bce0-f0ef318bbbd6"
       }
     },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "BusTrack needs your location to track the school bus route for parents."
+        }
+      ]
+    ],
     "android": {
       "package": "com.kherasam18.bustrack",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_LOCATION"
+      ]
     }
   }
-}
+}
