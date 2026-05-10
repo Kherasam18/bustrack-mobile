@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "extra": {
       "eas": {
         "projectId": "865c02a9-f842-4c10-bce0-f0ef318bbbd6"
