@@ -27,7 +27,8 @@ api.interceptors.request.use(
   (config) => {
     // Read token from Zustand outside of React (getState, not the hook)
     const { token } = useAuthStore.getState();
-    if (token) {
+    // Do not overwrite if already set explicitly (background context)
+    if (token && !config.headers.Authorization) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;

@@ -1,18 +1,25 @@
 // src/api/location.api.js — API wrapper for the GPS location update endpoint.
 // Sends driver coordinates to the backend which writes to Firebase RTDB.
-// The Axios interceptor auto-attaches the JWT — no manual auth headers.
+// Accepts an optional token parameter for background context where Zustand
+// is not hydrated — the Axios interceptor is bypassed when a token is provided.
 
 import api from '../api/axios';
 
 // Send a GPS location update to the backend
-export async function sendLocationUpdate({ journey_id, lat, lng, speed }) {
+export async function sendLocationUpdate({ journey_id, lat, lng, speed }, token = null) {
   try {
-    const response = await api.post('/api/location/update', {
-      journey_id,
-      lat,
-      lng,
-      speed,
-    });
+    // Build headers — use explicit token if provided (background context),
+    // otherwise let the Axios interceptor handle it (foreground context)
+    const headers = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await api.post(
+      '/api/location/update',
+      { journey_id, lat, lng, speed },
+      { headers }
+    );
     return response.data.data;
   } catch (error) {
     // Attach the HTTP status code so callers can distinguish 409 from network errors

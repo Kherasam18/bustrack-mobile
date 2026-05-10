@@ -1,20 +1,21 @@
 // src/services/backgroundLocation.js — Core GPS broadcasting engine for the
 // driver app. Defines an Expo background location task at module load time
 // (CRITICAL: TaskManager.defineTask must be at top level, not inside a function).
-// The background task reads journey_id from AsyncStorage because Zustand state
-// is not available in the background JS context.
+// The background task reads journey_id AND auth token from AsyncStorage because
+// Zustand state is not available in the background JS context.
 
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 import { getItem, setItem, removeItem, STORAGE_KEYS } from '../utils/storage';
 import { sendLocationUpdate } from '../api/location.api';
 import { enqueueLocation, dequeueAll } from './locationQueue';
+import useAuthStore from '../store/authStore';
 
 // Background task name registered with Expo
 export const LOCATION_TASK_NAME = 'bustrack-gps-task';
 
 // Flush queued location updates before sending the current one
-async function flushLocationQueue(currentJourneyId) {
+async function flushLocationQueue(currentJourneyId, token) {
   try {
     const queue = await dequeueAll();
     if (!queue || queue.length === 0) return;
@@ -27,7 +28,7 @@ async function flushLocationQueue(currentJourneyId) {
           lat: queue[i].lat,
           lng: queue[i].lng,
           speed: queue[i].speed,
-        });
+        }, token);
       } catch {
         // Re-enqueue the failed item and all remaining items
         for (let j = i; j < queue.length; j++) {
@@ -64,12 +65,17 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
   const journeyId = await getItem(STORAGE_KEYS.ACTIVE_JOURNEY_ID);
   if (!journeyId) return;
 
+  // Read the auth token from AsyncStorage (not Zustand — it is not hydrated
+  // in the background JS context that Android spawns)
+  const token = await getItem(STORAGE_KEYS.DRIVER_JWT);
+  if (!token) return;
+
   // Flush any previously queued updates first
-  await flushLocationQueue(journeyId);
+  await flushLocationQueue(journeyId, token);
 
   // Send the current location update
   try {
-    await sendLocationUpdate({ journey_id: journeyId, lat, lng, speed });
+    await sendLocationUpdate({ journey_id: journeyId, lat, lng, speed }, token);
     await setItem(STORAGE_KEYS.LAST_GPS_SENT_AT, new Date().toISOString());
   } catch (err) {
     // 409 means the journey is no longer active — stop broadcasting
@@ -97,6 +103,13 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
 export async function startLocationBroadcasting(journeyId) {
   // Persist journey ID so the background task can read it
   await setItem(STORAGE_KEYS.ACTIVE_JOURNEY_ID, journeyId);
+
+  // Save token for background task use — Zustand is hydrated in foreground context
+  const { token } = useAuthStore.getState();
+  if (!token) {
+    throw new Error('No auth token available. Please log in again.');
+  }
+  await setItem(STORAGE_KEYS.DRIVER_JWT, token);
 
   // Request foreground location permissions
   const foreground = await Location.requestForegroundPermissionsAsync();
@@ -138,6 +151,12 @@ export async function stopLocationBroadcasting() {
 
   try {
     await removeItem(STORAGE_KEYS.ACTIVE_JOURNEY_ID);
+  } catch {
+    // Swallow errors — this is cleanup code
+  }
+
+  try {
+    await removeItem(STORAGE_KEYS.DRIVER_JWT);
   } catch {
     // Swallow errors — this is cleanup code
   }

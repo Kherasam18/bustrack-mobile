@@ -14,6 +14,7 @@ export const STORAGE_KEYS = Object.freeze({
   ACTIVE_JOURNEY_ID: 'bustrack_active_journey_id',
   LOCATION_QUEUE: 'bustrack_location_queue',
   LAST_GPS_SENT_AT: 'bustrack_last_gps_sent_at',
+  DRIVER_JWT: 'bustrack_driver_jwt',
 });
 
 // Store a JSON-serialised value under the given key
