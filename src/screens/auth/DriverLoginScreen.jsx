@@ -66,7 +66,8 @@ function DriverLoginScreen() {
     } catch (err) {
       setSchoolError(
         err.response?.data?.message ||
-        'School not found. Check the code and try again.'
+        err.message ||
+        'Network error — check your connection'
       );
     } finally {
       setIsResolvingSchool(false);
