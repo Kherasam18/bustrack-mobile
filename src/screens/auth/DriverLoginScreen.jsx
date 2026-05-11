@@ -66,7 +66,8 @@ function DriverLoginScreen() {
     } catch (err) {
       setSchoolError(
         err.response?.data?.message ||
-        'School not found. Check the code and try again.'
+        err.message ||
+        'Network error'
       );
     } finally {
       setIsResolvingSchool(false);
@@ -172,7 +173,7 @@ function DriverLoginScreen() {
                   style={[
                     styles.primaryButton,
                     (!schoolCode.trim() || isResolvingSchool) &&
-                      styles.buttonDisabled,
+                    styles.buttonDisabled,
                   ]}
                   onPress={handleFindSchool}
                   activeOpacity={0.85}
@@ -257,7 +258,7 @@ function DriverLoginScreen() {
                 style={[
                   styles.primaryButton,
                   (!employeeId.trim() || !password || isLoggingIn) &&
-                    styles.buttonDisabled,
+                  styles.buttonDisabled,
                 ]}
                 onPress={handleLogin}
                 activeOpacity={0.85}

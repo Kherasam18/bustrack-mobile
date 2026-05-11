@@ -11,7 +11,8 @@ import axios from 'axios';
 import useAuthStore from '../store/authStore';
 
 // Base URL for all API requests — set EXPO_PUBLIC_API_URL in .env for production
-const BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000';
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://NO_ENV_VAR_SET:3000';
+console.log('API BASE_URL:', BASE_URL); // temporary diagnostic
 
 // Create a shared Axios instance with default config
 const api = axios.create({
