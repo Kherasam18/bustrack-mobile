@@ -24,7 +24,7 @@
     ],
     "android": {
       "package": "com.kherasam18.bustrack",
-      "googleServicesFile": "$GOOGLE_SERVICES_JSON",
+      "googleServicesFile": "./google-services.json",
       "usesCleartextTraffic": true,
       "permissions": [
         "ACCESS_FINE_LOCATION",
