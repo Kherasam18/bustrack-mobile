@@ -127,7 +127,7 @@ export async function startLocationBroadcasting(journeyId) {
   await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
     accuracy: Location.Accuracy.High,
     timeInterval: 15000,
-    distanceInterval: 10,
+    distanceInterval: 0,
     foregroundService: {
       notificationTitle: 'BusTrack GPS',
       notificationBody: 'Tracking your route for school safety',
