@@ -1,8 +1,9 @@
 // src/navigation/RootNavigator.jsx — Root navigator that reads Zustand auth state
 // and conditionally renders the correct navigator stack. Wraps all navigation in a
 // single NavigationContainer (this is the only instance in the entire app).
+// Also triggers FCM token registration when a user becomes authenticated.
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 
 // Auth state store
@@ -19,6 +20,9 @@ import ParentNavigator from './ParentNavigator';
 // Loading state component
 import LoadingOverlay from '../components/shared/LoadingOverlay';
 
+// FCM token registration service
+import { registerFcmToken } from '../services/fcmService';
+
 /**
  * RootNavigator — reads auth hydration state and routes to the correct navigator.
  *
@@ -32,6 +36,13 @@ import LoadingOverlay from '../components/shared/LoadingOverlay';
 function RootNavigator() {
   // Read auth state from Zustand
   const { token, user, isHydrated, logout } = useAuthStore();
+
+  // Register FCM token when user becomes authenticated
+  useEffect(() => {
+    if (token) {
+      registerFcmToken();
+    }
+  }, [token]);
 
   // Wait for Zustand to finish reading AsyncStorage
   if (!isHydrated) {

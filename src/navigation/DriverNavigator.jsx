@@ -1,11 +1,11 @@
 // src/navigation/DriverNavigator.jsx — Bottom tab navigator for authenticated
-// drivers. Two tabs: Home (DriverHomeScreen) and Profile (placeholder for
-// Phase 10c). Replaces the previous single-screen placeholder stack.
+// drivers. Two tabs: Home (DriverHomeScreen) and Profile (DriverProfileScreen).
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import DriverHomeScreen from '../screens/driver/DriverHomeScreen';
+import DriverProfileScreen from '../screens/driver/DriverProfileScreen';
 
 // Create the bottom tab navigator
 const Tab = createBottomTabNavigator();
@@ -19,35 +19,6 @@ const COLORS = {
   border: '#334155',
   textMuted: '#94A3B8',
 };
-
-// Inline placeholder for the profile tab (Phase 10c)
-function DriverProfilePlaceholder() {
-  return (
-    <View style={placeholderStyles.container}>
-      <Text style={placeholderStyles.icon}>👤</Text>
-      <Text style={placeholderStyles.text}>Profile — Coming in Phase 10c</Text>
-    </View>
-  );
-}
-
-// Placeholder screen styles
-const placeholderStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: COLORS.bg,
-  },
-  icon: {
-    fontSize: 48,
-    marginBottom: 16,
-  },
-  text: {
-    fontSize: 16,
-    color: COLORS.textMuted,
-    fontWeight: '600',
-  },
-});
 
 /**
  * DriverNavigator — bottom tab navigator with Home and Profile tabs.
@@ -76,10 +47,10 @@ function DriverNavigator() {
         }}
       />
 
-      {/* Profile tab — placeholder until Phase 10c */}
+      {/* Profile tab — driver profile and settings */}
       <Tab.Screen
         name="DriverProfile"
-        component={DriverProfilePlaceholder}
+        component={DriverProfileScreen}
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color }) => (

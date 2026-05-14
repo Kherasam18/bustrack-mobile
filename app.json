@@ -20,6 +20,12 @@
         {
           "locationAlwaysAndWhenInUsePermission": "BusTrack needs your location to track the school bus route for parents."
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#2563EB"
+        }
       ]
     ],
     "android": {

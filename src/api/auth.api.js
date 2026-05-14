@@ -58,3 +58,30 @@ export async function forgotPasswordReset({ reset_token, new_password }) {
   });
   return response.data.data;
 }
+
+// Register the device FCM token with the backend
+export async function registerFcmTokenApi({ fcm_token }) {
+  try {
+    const response = await api.post('/api/users/register-fcm-token', {
+      fcm_token,
+    });
+    return response.data.data;
+  } catch (err) {
+    const message = err.response?.data?.message || err.message;
+    throw new Error(message);
+  }
+}
+
+// Change the authenticated driver's password
+export async function changeDriverPassword({ current_password, new_password }) {
+  try {
+    const response = await api.post('/api/auth/driver/change-password', {
+      current_password,
+      new_password,
+    });
+    return response.data.data;
+  } catch (err) {
+    const message = err.response?.data?.message || err.message;
+    throw new Error(message);
+  }
+}
